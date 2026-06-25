@@ -1,0 +1,21 @@
+# BM Builder — "Forest & Gold" premium LIGHT theme (chrome only; no logic).
+
+[client]
+# Hide Streamlit's "Deploy" button and the ⋮ developer menu (Rerun, Clear cache, Print,
+# Record screen, "Made with Streamlit"…) — this is an end-user app, not a dev console.
+toolbarMode = "minimal"
+
+# "Forest & Gold" — deep green primary, antique-gold accent, warm cream canvas.
+[theme]
+base = "light"
+primaryColor = "#13402b"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f6f3eb"
+textColor = "#171411"
+linkColor = "#13402b"
+borderColor = "#e8e2d6"
+font = "Plus Jakarta Sans, sans-serif"
+headingFont = "Plus Jakarta Sans, sans-serif"
+baseRadius = "0.5rem"
+buttonRadius = "0.5rem"
+showWidgetBorder = true

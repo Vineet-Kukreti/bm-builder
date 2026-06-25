@@ -1,0 +1,24 @@
+# Secrets — never commit
+.env
+settings.json          # in-app API keys (plaintext, written beside the code)
+
+# Claude Code local config (machine-specific paths, regenerated automatically)
+.claude/
+
+# Editor-local config
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# Generated project workspaces (each build lives here)
+workspace_builds/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db

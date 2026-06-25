@@ -1,0 +1,9 @@
+streamlit
+anthropic
+openai            # only needed for OpenAI / OpenAI-compatible providers
+python-dotenv
+
+# Optional but recommended (the app degrades gracefully if these are absent):
+streamlit-sortables   # drag-and-drop roadmap board
+pypdf                 # parse uploaded PDF briefs
+python-docx           # parse uploaded Word (.docx) briefs
