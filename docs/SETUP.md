@@ -115,6 +115,10 @@ This routes agents **and** the autonomous build through [Claude Code](https://do
 3. **Sign in** (one time): run `claude` and follow the prompt to log in with your Claude subscription.
 4. That's it — leave the app's provider on its default ("Claude — Subscription"). Optionally also add an Anthropic API key (Option B) so **visual/screenshot review** works.
 
+> **🪟 Windows notes:**
+> - Run these in **PowerShell** (the default terminal). All three commands above (`winget`, `npm install -g`, `claude`) work from **any folder** — `-g` installs globally, so you don't need to `cd` into the project. Only *running the app* (`.\run.ps1`) needs the project folder.
+> - **If the app was already open when you installed Claude Code,** it won't see it yet — a running app keeps the PATH it started with. Click **↻ Re-check** on the dashboard, or restart the app (`Ctrl+C`, then `.\run.ps1`). Verify the install anytime with `claude --version` in a new terminal.
+
 ---
 
 ### Option B — Anthropic API key (metered)

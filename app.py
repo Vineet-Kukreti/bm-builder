@@ -111,6 +111,7 @@ from dashboard_engine import (
     claude_code_available,
     vscode_available,
     node_available,
+    refresh_path_from_registry,
     start_planning,
     role_provider,
     provider_family,
@@ -320,6 +321,7 @@ def _reset_after_delete():
 def check_requirements(force=False):
     """Detect (and cache) whether Node.js, Claude Code and VS Code CLIs are available."""
     if force or "_reqs" not in strl.session_state:
+        refresh_path_from_registry()   # pick up tools installed since the app started (Windows)
         strl.session_state._reqs = {"claude": claude_code_available(),
                                     "vscode": vscode_available(),
                                     "node": node_available()}
@@ -1144,6 +1146,11 @@ if strl.session_state.stage == "dashboard":
             "- Both development options use **Claude Code on your subscription** (the CEO-assigned "
             "Developer model) — no API cost."
         )
+        strl.caption("Run these in **PowerShell** (the default Windows terminal). `npm install -g ...` installs "
+                     "globally, so it doesn't matter which folder you're in — only *running the app* needs the "
+                     "project folder. **Just installed Claude Code but it still shows a dash above?** Click "
+                     "**Re-check**; if it still won't appear, restart the app (press `Ctrl+C`, then run "
+                     "`.\\run.ps1` again) so it picks up the newly-installed command.")
         if strl.button("↻ Re-check"):
             check_requirements(force=True)
             strl.rerun()

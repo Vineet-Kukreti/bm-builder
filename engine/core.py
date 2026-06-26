@@ -1812,6 +1812,38 @@ def node_available():
         return False
 
 
+def refresh_path_from_registry():
+    """On Windows, merge the current machine + user PATH from the registry into this process's
+    environment. A tool installed AFTER the app started (e.g. Claude Code via `npm i -g`) lands on
+    the PATH for *new* terminals, but the running app keeps its old PATH and can't see it. Calling
+    this before a requirements re-check lets the app detect it without a restart. No-op off Windows."""
+    if os.name != "nt":
+        return
+    try:
+        import winreg
+        vals = []
+        for root, sub in ((winreg.HKEY_LOCAL_MACHINE,
+                           r"SYSTEM\CurrentControlSet\Control\Session Manager\Environment"),
+                          (winreg.HKEY_CURRENT_USER, "Environment")):
+            try:
+                with winreg.OpenKey(root, sub) as key:
+                    raw, _ = winreg.QueryValueEx(key, "Path")
+                    if raw:
+                        vals.append(os.path.expandvars(raw))
+            except OSError:
+                pass
+        seen, out = set(), []
+        for p in os.pathsep.join(vals + [os.environ.get("PATH", "")]).split(os.pathsep):
+            p = p.strip()
+            if p and p.lower() not in seen:
+                seen.add(p.lower())
+                out.append(p)
+        if out:
+            os.environ["PATH"] = os.pathsep.join(out)
+    except Exception:
+        pass
+
+
 def start_claude_code_build(base_dir, name):
     """Run Claude Code headlessly to implement the project (build → run → fix) on
     the operator's subscription. Returns False if a build is already running."""
