@@ -35,6 +35,18 @@ if (-not (Test-Path ".env")) {
     Write-Host "Created .env - add your Anthropic API key there, or later in the app's Settings page." -ForegroundColor Yellow
 }
 
+# 4b. Heads-up: Node.js + Claude Code power the autonomous build (optional - the app runs without them)
+$haveNode   = [bool](Get-Command node   -ErrorAction SilentlyContinue)
+$haveClaude = [bool](Get-Command claude -ErrorAction SilentlyContinue)
+if (-not ($haveNode -and $haveClaude)) {
+    Write-Host ""
+    Write-Host "Heads-up: the one-click autonomous build uses Claude Code (optional - you can still brainstorm & plan without it):" -ForegroundColor Yellow
+    if (-not $haveNode)   { Write-Host "  * Node.js not found     -> winget install OpenJS.NodeJS.LTS   (then open a NEW terminal)" -ForegroundColor Yellow }
+    if (-not $haveClaude) { Write-Host "  * Claude Code not found -> npm install -g @anthropic-ai/claude-code, then run 'claude' to sign in" -ForegroundColor Yellow }
+    Write-Host "  Set this up anytime - or pick your AI provider in the app's 'Setup & checks' screen." -ForegroundColor Yellow
+    Write-Host ""
+}
+
 # 5. Launch
 Write-Host "Starting BM Builder..." -ForegroundColor Green
 & $venvPy -m streamlit run app.py

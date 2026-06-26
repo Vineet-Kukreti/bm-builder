@@ -6,15 +6,15 @@ A practical, step-by-step walkthrough. If you just want to get running, see the 
 
 ## 1. Install & first run
 
-1. **Install Python 3.9+** and confirm it works: `python --version`.
-2. **Install dependencies:** `pip install -r requirements.txt`.
+1. **Install Python 3.9+** and confirm it works: `python --version`. (Windows: install from [python.org](https://www.python.org/downloads/) with **"Add python.exe to PATH"** ticked — not the Microsoft Store build.)
+2. **Install dependencies:** `python -m pip install -r requirements.txt`.
 3. **Add a key (recommended):** copy `.env.example` to `.env` and paste your Anthropic API key, or add it later from the in-app **Settings** page.
-4. **(Optional but recommended) Install Claude Code** for $0 autonomous builds:
+4. **(Optional but recommended) Install Claude Code** for $0 autonomous builds. It needs **Node.js** (which provides the `npm` command) — install Node first with `winget install OpenJS.NodeJS.LTS` (or [nodejs.org](https://nodejs.org)) and **open a new terminal**, then:
    ```bash
    npm install -g @anthropic-ai/claude-code
    claude        # run once and sign in with your Claude subscription
    ```
-5. **Start the app:** `streamlit run app.py`. It opens in your browser.
+5. **Start the app:** `python -m streamlit run app.py`. It opens in your browser. (Use `python -m streamlit`, not a bare `streamlit` — see Troubleshooting if you hit *"streamlit is not recognized."*)
 
 In the sidebar you'll see the **Engine** status. Green "Ready" means an Anthropic key is detected. You can still run agents on your Claude subscription without an API key — the key mainly enables metered fallback and visual review.
 
@@ -95,13 +95,16 @@ You get a cost breakdown, a `RUN_GUIDE.md` explaining how to run the project, an
 
 | Symptom | Fix |
 |---|---|
+| **(Windows) `Python was not found… Microsoft Store`** | Windows is intercepting the `python` command. Reinstall from [python.org](https://www.python.org/downloads/) with **"Add python.exe to PATH"** ticked, **or** turn off **Settings → Apps → Advanced app settings → App execution aliases** for `python.exe`/`python3.exe`, then open a **new** terminal. The `py` launcher usually works too: `py -m streamlit run app.py`. |
+| **(Windows) `'streamlit' is not recognized`** | Run Streamlit through Python: `python -m streamlit run app.py` — not the bare `streamlit` command. |
+| **`npm` / `node` is not recognized** | Node.js isn't installed — Claude Code's autonomous build needs it (the app itself doesn't). Install with `winget install OpenJS.NodeJS.LTS` (or [nodejs.org](https://nodejs.org)), open a **new** terminal, then `npm install -g @anthropic-ai/claude-code`. |
 | **"ANTHROPIC_API_KEY not set"** | Add a key in **Settings → API keys**, or to `.env`, then restart. Or run agents on your Claude subscription. |
-| **Builds don't start / "Claude Code not installed"** | `npm install -g @anthropic-ai/claude-code`, run `claude` once to sign in, then click **Re-check**. |
+| **Builds don't start / "Claude Code not installed"** | Install **Node.js** (`winget install OpenJS.NodeJS.LTS`), then `npm install -g @anthropic-ai/claude-code`, run `claude` once to sign in, and click **Re-check**. |
 | **"Open in VS Code" does nothing** | Install VS Code and enable the `code` command (Command Palette → *Shell Command: Install 'code' command in PATH*). |
 | **Agents return malformed/empty output on subscription** | Switch the JSON-strict agents (QA / Skeptic) to **Claude API** in **Settings → AI per agent**, or run with an Anthropic key set. |
-| **Sidebar warns "Source changed on disk"** | You edited the code while running. Stop Streamlit (Ctrl+C) and run `streamlit run app.py` again. |
+| **Sidebar warns "Source changed on disk"** | You edited the code while running. Stop Streamlit (Ctrl+C) and run `python -m streamlit run app.py` again. |
 | **A project looks stuck "Building"** | The app reconciles orphaned builds on load. Open the project, or **Sync from folder**, or restart the app. |
-| **PDF/Word brief won't parse** | Install the optional parsers: `pip install pypdf python-docx`. |
+| **PDF/Word brief won't parse** | Install the optional parsers: `python -m pip install pypdf python-docx`. |
 
 ---
 

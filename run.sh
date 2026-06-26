@@ -34,6 +34,16 @@ if [ ! -f ".env" ]; then
   echo "Created .env - add your Anthropic API key there, or later in the app's Settings page."
 fi
 
+# 4b. Heads-up: Node.js + Claude Code power the autonomous build (optional - the app runs without them)
+if ! command -v node >/dev/null 2>&1 || ! command -v claude >/dev/null 2>&1; then
+  echo ""
+  echo "Heads-up: the one-click autonomous build uses Claude Code (optional - you can still brainstorm & plan without it):"
+  command -v node   >/dev/null 2>&1 || echo "  * Node.js not found     -> install from https://nodejs.org (or 'brew install node')"
+  command -v claude >/dev/null 2>&1 || echo "  * Claude Code not found -> npm install -g @anthropic-ai/claude-code, then run 'claude' to sign in"
+  echo "  Set this up anytime - or pick your AI provider in the app's 'Setup & checks' screen."
+  echo ""
+fi
+
 # 5. Launch
 echo "Starting BM Builder..."
 exec "$VENVPY" -m streamlit run app.py

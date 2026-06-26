@@ -8,35 +8,72 @@ BM Builder is a local-first [Streamlit](https://streamlit.io) app. You describe 
 
 Everything runs on your machine. Your idea, your code, and your keys never leave your computer except as calls to the AI provider you choose.
 
+> 🆘 **Install hiccup on Windows?** The two most common errors — *"Python was not found…"* and *"'streamlit' is not recognized…"* — each have a one-line fix in **[Troubleshooting](docs/HELP.md#troubleshooting)**.
+
 ---
 
 ## ▶️ Run it (after you download)
 
-**No file paths to edit** — the app works wherever you save it. Unzip the download (or `git clone` it), then **open a terminal in that folder** and run:
+**No file paths to edit** — the app works wherever you save it. Unzip the download (or `git clone` it), then **open a terminal in that folder**.
 
-**Easiest — one command** (creates a virtual environment, installs everything, and launches the app):
+### Easiest — one command
 
-```bash
+This creates a virtual environment, installs everything, and launches the app:
+
+```powershell
 # Windows (PowerShell)
 .\run.ps1
-
+```
+```bash
 # macOS / Linux
 chmod +x run.sh && ./run.sh
 ```
 
-**Or step by step** (works the same on Windows, macOS, and Linux):
+If it stops with **"Python was not found,"** do the one-time **Install Python** step below, open a **new** terminal, and run it again.
 
-1. **Make sure you have Python 3.9+** — check with `python --version` (or `python3 --version`). [Get it here](https://www.python.org/downloads/) if missing (on Windows, tick *"Add python.exe to PATH"*).
-2. **Install the dependencies:**
-   ```bash
-   pip install -r requirements.txt
+### Step by step (if you prefer, or the launcher won't start)
+
+1. **Install Python 3.9+ and make sure your terminal can find it.**
+   - **Windows (smoothest path):** download the installer from **[python.org/downloads](https://www.python.org/downloads/)**, run it, and on the **first screen tick "Add python.exe to PATH"** *before* clicking **Install Now**:
+
+     ![On the Python installer's first screen, tick "Add python.exe to PATH" before clicking Install Now](docs/img/python-add-to-path.png)
+
+     **Or skip the GUI** — in PowerShell run:
+     ```powershell
+     winget install Python.Python.3.12
+     ```
+     winget installs Python and adds it to PATH for you (no checkbox to tick) — just **open a new terminal** afterwards so the PATH change takes effect.
+
+     **Don't see a checkbox?** That's expected with `winget`, or if Windows sent you to the **Microsoft Store** — just run the `python --version` check below; if it fails, use the one-line fix in **🪟 Windows gotchas** further down.
+   - **macOS:** `brew install python`, or download from [python.org](https://www.python.org/downloads/).
+   - **Linux:** `sudo apt install python3 python3-pip python3-venv` (Debian/Ubuntu).
+
+   Then confirm it works — you should see `Python 3.x`:
+   ```powershell
+   python --version
    ```
-3. **Start the app:**
-   ```bash
-   streamlit run app.py
+   (If you instead see *"Python was not found…"*, jump to **🪟 Windows gotchas** below.)
+
+2. **Install the dependencies** — use `python -m pip` (more reliable than a bare `pip`):
+   ```powershell
+   python -m pip install -r requirements.txt
+   ```
+
+3. **Start the app** — run Streamlit *through Python* so you don't need it on your PATH:
+   ```powershell
+   python -m streamlit run app.py
    ```
 
 The app opens in your browser. **On the first run, click "Setup & checks" in the sidebar** — a guided screen lets you pick your AI provider (Claude subscription or an API key) and paste your key, with no files to edit. Then click **New project** and you're off.
+
+> **🪟 Windows gotchas (the two most common — both quick to fix):**
+>
+> - **`Python was not found; run without arguments to install from the Microsoft Store…`**
+>   Windows is intercepting the `python` command. Either **(a)** reinstall from [python.org](https://www.python.org/downloads/) with **"Add python.exe to PATH"** ticked, **or (b)** turn the alias off: **Settings → Apps → Advanced app settings → App execution aliases** → switch **off** the `python.exe` and `python3.exe` entries. Open a **new** terminal afterwards.
+>   *Tip:* the **`py`** launcher often works even when `python` doesn't — try `py --version`, then use `py -m pip install -r requirements.txt` and `py -m streamlit run app.py`.
+>
+> - **`streamlit : The term 'streamlit' is not recognized…`**
+>   Don't call `streamlit` directly — run it through Python: **`python -m streamlit run app.py`** (that's why the steps above use `python -m`).
 
 > 📖 Want every option spelled out (installing Python/Node, each provider, troubleshooting)? See the **[full Setup Guide → docs/SETUP.md](docs/SETUP.md)**. · Using the tool day to day: **[docs/HELP.md](docs/HELP.md)**.
 
@@ -44,12 +81,16 @@ The app opens in your browser. **On the first run, click "Setup & checks" in the
 
 ## Screenshots
 
-<!-- Add a screenshot or a short GIF (idea → plan → build) here — it's the single biggest boost to the
-     GitHub landing page. Drop images in docs/img/ and reference them, e.g.:
-     ![Dashboard](docs/img/dashboard.png)
-     ![Planning](docs/img/planning.png) -->
+Describe an idea, then watch it move from **brainstorm → plan → autonomous build → delivered**.
 
-_Screenshots coming soon. (Drop images in `docs/img/` and link them here.)_
+![BM Builder dashboard — your projects](docs/img/screenshot-dashboard.png)
+
+| | |
+|:--|:--|
+| **1 · Brainstorm** — the team asks sharp questions; a readiness score climbs | **2 · Plan** — a real PRD, tech spec, data model & roadmap |
+| ![Brainstorm](docs/img/screenshot-brainstorm.png) | ![Plan](docs/img/screenshot-plan.png) |
+| **3 · Build** — Claude Code builds it live across a Kanban board | **4 · Delivered** — a run guide, cost breakdown, and next steps |
+| ![Build](docs/img/screenshot-build.png) | ![Delivered](docs/img/screenshot-delivered.png) |
 
 ---
 
@@ -84,7 +125,7 @@ Dashboard → New project → Brainstorm → Plan & PRD → Development → Deli
 
 - **Python 3.9+**
 - **An AI provider** — at least one of:
-  - **Claude Code** (recommended, $0 builds): `npm install -g @anthropic-ai/claude-code`, then run `claude` once and sign in. Required for autonomous builds.
+  - **Claude Code** (recommended, $0 builds) — **requires [Node.js](https://nodejs.org)**, which provides the `npm` command. Install Node first (`winget install OpenJS.NodeJS.LTS`, or [nodejs.org](https://nodejs.org)), **open a new terminal**, then run `npm install -g @anthropic-ai/claude-code` and `claude` once to sign in. Required for autonomous builds. *(Seeing `npm is not recognized`? Node.js isn't installed yet.)*
   - **An Anthropic API key** — recommended for metered fallback and visual/screenshot review. Get one at [console.anthropic.com](https://console.anthropic.com/settings/keys).
   - Optionally: an OpenAI key or any OpenAI-compatible endpoint for non-Claude agents.
 - **VS Code** with the `code` command on your PATH — only if you want the "Open in VS Code" handoff.

@@ -23,9 +23,22 @@ If it prints `Python 3.9` or higher, skip to Step 2. Otherwise install it:
 
 | OS | How |
 |----|-----|
-| **Windows** | Download from [python.org/downloads](https://www.python.org/downloads/) and **tick "Add python.exe to PATH"** during install. (Or run `winget install Python.Python.3.12`.) |
+| **Windows** | Download from [python.org/downloads](https://www.python.org/downloads/) and **tick "Add python.exe to PATH"** during install. **Or, no GUI:** run `winget install Python.Python.3.12`, then **open a new terminal**. |
 | **macOS** | `brew install python` (needs [Homebrew](https://brew.sh)), or download from [python.org](https://www.python.org/downloads/). |
 | **Linux** | `sudo apt update && sudo apt install python3 python3-pip python3-venv` (Debian/Ubuntu). |
+
+**🪟 Windows — on the installer's first screen, tick "Add python.exe to PATH"** *before* clicking **Install Now**:
+
+![Python installer: tick "Add python.exe to PATH" before clicking Install Now](img/python-add-to-path.png)
+
+> **Don't see that checkbox?** If `python` sent you to the **Microsoft Store**, or you installed with **`winget`**, there's no checkbox to tick — that's expected for those methods. Just verify with `python --version`; if it fails, use the fix below.
+
+> **🪟 Windows: seeing `Python was not found; run without arguments to install from the Microsoft Store…`?**
+> That means Windows is intercepting the `python` command — Python isn't on your PATH, or the Store "app execution alias" is on. Fix it either way, then open a **new** terminal:
+> 1. Reinstall from [python.org](https://www.python.org/downloads/) with **"Add python.exe to PATH"** ticked, **or**
+> 2. **Settings → Apps → Advanced app settings → App execution aliases** → turn **off** the `python.exe` and `python3.exe` entries.
+>
+> *Tip:* the **`py`** launcher usually works even when `python` doesn't — try `py --version`, and use `py -m …` anywhere these docs say `python -m …` (e.g. `py -m streamlit run app.py`).
 
 ---
 
@@ -63,8 +76,10 @@ source .venv/bin/activate
 ### 2c. Install dependencies
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
+
+> Use `python -m pip` (not a bare `pip`) — it always installs into the Python you just set up, and it works even when `pip` isn't on your PATH. On Windows you can use `py -m pip …` instead.
 
 ---
 
@@ -137,8 +152,10 @@ Run agents through any OpenAI-compatible endpoint.
 ## Step 4 — Run the app
 
 ```bash
-streamlit run app.py
+python -m streamlit run app.py
 ```
+
+> Run Streamlit **through Python** like this. Calling `streamlit run app.py` directly often fails on Windows with *"streamlit : The term 'streamlit' is not recognized…"* because `streamlit.exe` isn't on your PATH — `python -m streamlit` (or `py -m streamlit`) avoids that entirely.
 
 Your browser opens to BM Builder. In the **sidebar**:
 

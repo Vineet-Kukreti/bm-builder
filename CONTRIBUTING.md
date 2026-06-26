@@ -14,13 +14,13 @@ Thanks for your interest in improving BM Builder! This is a small, local-first S
 # 1. Fork & clone, then:
 python -m venv .venv
 # Windows: .\.venv\Scripts\Activate.ps1   |   macOS/Linux: source .venv/bin/activate
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 
 # 2. Add a key (or use your Claude Code subscription)
 cp .env.example .env        # then paste your ANTHROPIC_API_KEY
 
 # 3. Run
-streamlit run app.py
+python -m streamlit run app.py
 ```
 
 See [docs/SETUP.md](docs/SETUP.md) for the full setup guide.
@@ -38,7 +38,7 @@ python -m unittest discover -s tests                                   # unit te
 Then sanity-check the screens you touched still render:
 
 ```bash
-streamlit run app.py
+python -m streamlit run app.py
 ```
 
 ### Engine layout
