@@ -110,6 +110,7 @@ from dashboard_engine import (
     start_claude_code_build,
     claude_code_available,
     vscode_available,
+    node_available,
     start_planning,
     role_provider,
     provider_family,
@@ -317,10 +318,11 @@ def _reset_after_delete():
 
 
 def check_requirements(force=False):
-    """Detect (and cache) whether Claude Code and VS Code CLIs are available."""
+    """Detect (and cache) whether Node.js, Claude Code and VS Code CLIs are available."""
     if force or "_reqs" not in strl.session_state:
         strl.session_state._reqs = {"claude": claude_code_available(),
-                                    "vscode": vscode_available()}
+                                    "vscode": vscode_available(),
+                                    "node": node_available()}
     return strl.session_state._reqs
 
 
@@ -1133,9 +1135,12 @@ if strl.session_state.stage == "dashboard":
             f"- {'✓' if reqs['vscode'] else '—'} **VS Code installed** "
             + ("" if reqs["vscode"] else "→ install from https://code.visualstudio.com and enable "
                "the `code` command (Command Palette → *Shell Command: Install 'code' command in PATH*).") + "\n"
+            f"- {'✓' if reqs['node'] else '—'} **Node.js installed** (provides the `npm` command that Claude Code needs) "
+            + ("" if reqs["node"] else "→ `winget install OpenJS.NodeJS.LTS` (or https://nodejs.org), then open a "
+               "**new** terminal.") + "\n"
             f"- {'✓' if reqs['claude'] else '—'} **Claude Code installed & logged in** "
-            + ("" if reqs["claude"] else "→ `npm install -g @anthropic-ai/claude-code`, then run "
-               "`claude` once and sign in with your Claude subscription.") + "\n"
+            + ("" if reqs["claude"] else "→ **after installing Node.js**, run `npm install -g @anthropic-ai/claude-code`, "
+               "then `claude` once and sign in with your Claude subscription.") + "\n"
             "- Both development options use **Claude Code on your subscription** (the CEO-assigned "
             "Developer model) — no API cost."
         )
@@ -1814,7 +1819,10 @@ elif strl.session_state.stage == "development":
     rq1, rq2, rq3 = strl.columns([3, 3, 1])
     rq1.caption(("✓ " if reqs["claude"] else "— ") + "Claude Code "
                 + ("installed & ready" if reqs["claude"]
-                   else "— `npm i -g @anthropic-ai/claude-code`, then `claude` to log in"))
+                   else ("— install Node.js first (`winget install OpenJS.NodeJS.LTS`), then "
+                         "`npm i -g @anthropic-ai/claude-code` and `claude` to log in"
+                         if not reqs.get("node")
+                         else "— `npm i -g @anthropic-ai/claude-code`, then `claude` to log in")))
     rq2.caption(("✓ " if reqs["vscode"] else "— ") + "VS Code "
                 + ("installed" if reqs["vscode"] else "— install VS Code with the `code` command"))
     if rq3.button("↻ Re-check", key=f"recheck_{name}"):

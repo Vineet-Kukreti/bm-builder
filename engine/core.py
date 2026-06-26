@@ -1802,6 +1802,16 @@ def vscode_available():
         return False
 
 
+def node_available():
+    """True if Node.js is installed (it provides `npm`, which Claude Code needs)."""
+    try:
+        r = subprocess.run("node --version", shell=True, capture_output=True,
+                           text=True, timeout=20)
+        return r.returncode == 0
+    except Exception:
+        return False
+
+
 def start_claude_code_build(base_dir, name):
     """Run Claude Code headlessly to implement the project (build → run → fix) on
     the operator's subscription. Returns False if a build is already running."""
